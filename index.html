@@ -3,220 +3,1404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manifesto for My Sculptural AI</title>
+    <title>Sculptural AI — Studio Interface</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
-            font-family: 'Georgia', serif;
-            line-height: 1.8;
-            color: #2c2c2c;
-            background: linear-gradient(135deg, #f5f5f5 0%, #ebebeb 100%);
-            padding: 2rem;
+
+        :root {
+            --off-white: #f8f8f6;
+            --gray-light: #e0e0dc;
+            --gray-mid: #999999;
+            --gray-dark: #4a4a4a;
+            --technical-blue: #5b7c99;
+            --lemon: #e8ed6f;
+            --transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
-        
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: var(--off-white);
+            color: var(--gray-dark);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            padding: 4rem;
-            border-radius: 4px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 60px 40px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 28px;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-mid);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--technical-blue);
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        .label {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--gray-mid);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Hero Section */
+        .hero {
+            grid-column: 1 / -1;
+            padding: 100px 0 80px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
             position: relative;
         }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
+
+        .hero-title::before {
+            content: '';
+            position: absolute;
+            left: -40px;
+            top: 12px;
+            width: 3px;
+            height: 24px;
+            background: var(--lemon);
+        }
+
+        .hero-intro {
+            grid-column: 1 / 9;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--gray-dark);
+        }
+
+        .hero-meta {
+            grid-column: 10 / -1;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: var(--gray-mid);
+            line-height: 2;
+        }
+
+        /* Module Sections */
+        .module {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+
+        .module:hover {
+            background-color: rgba(91, 124, 153, 0.02);
+        }
+
+        .module-header {
+            grid-column: 1 / 4;
+            position: relative;
+        }
+
+        .module-index {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--gray-mid);
+            margin-bottom: 8px;
+        }
+
+        .module-content {
+            grid-column: 4 / 11;
+        }
+
+        .module-annotation {
+            grid-column: 11 / -1;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--gray-mid);
+            opacity: 0;
+            transition: var(--transition);
+            line-height: 1.8;
+        }
+
+        .module:hover .module-annotation {
+            opacity: 1;
+        }
+
+        /* Expandable Sections */
+        .expandable {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .expandable-trigger {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .expandable-icon {
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--gray-mid);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .expandable-icon::before,
+        .expandable-icon::after {
+            content: '';
+            position: absolute;
+            background: var(--gray-mid);
+            transition: var(--transition);
+        }
+
+        .expandable-icon::before {
+            width: 8px;
+            height: 1px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .expandable-icon::after {
+            width: 1px;
+            height: 8px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .expandable.active .expandable-icon {
+            border-color: var(--technical-blue);
+            background: rgba(91, 124, 153, 0.05);
+        }
+
+        .expandable.active .expandable-icon::after {
+            height: 0;
+        }
+
+        .expandable.active .expandable-icon::before {
+            background: var(--technical-blue);
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .expandable.active .expandable-content {
+            max-height: 1000px;
+        }
+
+        .expandable-inner {
+            padding: 20px;
+            background: rgba(91, 124, 153, 0.03);
+            border-left: 2px solid var(--technical-blue);
+            margin-bottom: 16px;
+        }
+
+        /* Closing Statement */
+        .closing {
+            grid-column: 1 / -1;
+            padding: 80px 0 40px;
             text-align: center;
-            color: #1a1a1a;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            border-bottom: 3px solid #2c2c2c;
-            padding-bottom: 1rem;
         }
-        
-        h2 {
-            font-size: 1.5rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: #2c2c2c;
-            font-weight: 400;
-            border-left: 4px solid #2c2c2c;
-            padding-left: 1rem;
-            letter-spacing: 0.3px;
+
+        .closing-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--technical-blue);
+            max-width: 700px;
+            margin: 0 auto 24px;
         }
-        
-        p {
-            margin-bottom: 1.5rem;
-            text-align: justify;
-            font-size: 1.05rem;
-            color: #404040;
+
+        .closing-accent {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--lemon);
+            font-weight: 500;
         }
-        
-        p strong {
-            font-weight: 600;
-            color: #1a1a1a;
+
+        .closing-footnote {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--gray-mid);
+            margin-top: 40px;
         }
-        
-        em {
+
+        /* Emphasis Block */
+        .emphasis {
+            background: rgba(232, 237, 111, 0.15);
+            padding: 20px;
+            border-left: 3px solid var(--lemon);
+            margin: 24px 0;
             font-style: italic;
-            color: #555;
-        }
-        
-        section {
-            margin: 2.5rem 0;
-        }
-        
-        .intro-section {
-            background: #fafafa;
-            padding: 2rem;
-            border-radius: 4px;
-            margin-bottom: 2rem;
-            border-left: 4px solid #2c2c2c;
-        }
-        
-        .intro-section p {
-            margin-bottom: 1rem;
-        }
-        
-        .conclusion {
-            background: #f0f0f0;
-            padding: 2rem;
-            border-radius: 4px;
-            margin-top: 2.5rem;
-            border-left: 4px solid #2c2c2c;
-            font-style: italic;
-            font-size: 1.1rem;
-        }
-        
-        .section-content {
-            margin-bottom: 1rem;
-        }
-        
-        footer {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid #e0e0e0;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #888;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 2rem;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            h2 {
-                font-size: 1.2rem;
-            }
-            
-            body {
-                padding: 1rem;
-            }
-        }
-        
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-                color: #e0e0e0;
-            }
-            
-            .container {
-                background: #2a2a2a;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            }
-            
-            h1, h2 {
-                color: #f0f0f0;
-            }
-            
-            p {
-                color: #d0d0d0;
-            }
-            
-            .intro-section {
-                background: #333;
-            }
-            
-            .conclusion {
-                background: #3a3a3a;
-            }
-            
-            footer {
-                color: #999;
-                border-top-color: #444;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Manifesto</h1>
-        
-        <section class="intro-section">
-            <h2 style="border: none; padding: 0; margin: 0;">Manifesto for My Sculptural AI</h2>
-            <p style="margin-top: 1.5rem;">As a painter, I imagine an AI that is not a general assistant but a precise extension of my studio—an internal translator that carries my brush logic into space. This AI does not replace collaboration; it reduces friction between imagination and fabrication. It knows my visual language because it is trained on my paintings, my revisions, my hesitations. It is not neutral software—it is a positioned tool shaped around authorship.</p>
-        </section>
-        
-        <section>
-            <h2>Capabilities (what my AI is enabled to do)</h2>
-            <div class="section-content">
-                <p>My AI can analyze my paintings and extract structural principles—gesture rhythm, density, proportion, repetition, tension. It can translate these into sculptural proposals and generate accurate CAD models ready for prototyping. It can simulate material weight, balance, and scale. It can iterate rapidly, producing variations while preserving the core DNA of my visual language.</p>
+        <!-- Hero Section -->
+        <section class="grid">
+            <div class="hero">
+                <span class="label">Studio Interface / 2026</span>
+                <h1 class="hero-title">Sculptural AI</h1>
+            </div>
+
+            <div class="hero-intro">
+                <p>As a painter, I imagine an AI that is not a general assistant but a precise extension of my studio—an internal translator that carries my brush logic into space. This AI does not replace collaboration; it reduces friction between imagination and fabrication.</p>
+                <p>It knows my visual language because it is trained on my paintings, my revisions, my hesitations. It is not neutral software—it is a positioned tool shaped around authorship.</p>
+            </div>
+
+            <div class="hero-meta">
+                <div>TYPE: Research Tool</div>
+                <div>TRAINING: Archive-Based</div>
+                <div>POSITION: Authored</div>
+                <div>STATUS: Speculative</div>
             </div>
         </section>
-        
-        <section>
-            <h2>Prescription (what my AI is prevented from doing)</h2>
-            <div class="section-content">
-                <p>My AI is prevented from generating in styles that are not mine. It cannot scrape external aesthetics or imitate other artists. It cannot overwrite my decisions or finalize a work without my confirmation. It does not optimize for market trends, popularity, or commercial taste. It remains aligned to my authorship, not external demand.</p>
+
+        <!-- Capabilities -->
+        <section class="grid">
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-index">[01]</div>
+                    <h3>Capabilities</h3>
+                    <span class="label">What it is enabled to do</span>
+                </div>
+                <div class="module-content">
+                    <p>My AI can analyze my paintings and extract structural principles—gesture rhythm, density, proportion, repetition, tension. It can translate these into sculptural proposals and generate accurate CAD models ready for prototyping.</p>
+                    <p>It can simulate material weight, balance, and scale. It can iterate rapidly, producing variations while preserving the core DNA of my visual language.</p>
+                </div>
+                <div class="module-annotation">
+                    Analysis → Translation → Fabrication
+                </div>
             </div>
         </section>
-        
-        <section>
-            <h2>Permissions (what my AI can do, even if not explicitly enabled)</h2>
-            <div class="section-content">
-                <p>My AI may surprise me. It may recombine fragments of my past works in unexpected ways. It may exaggerate certain gestures or distort proportions to test the limits of my language. It may propose structural solutions I would not have technically imagined, as long as they remain grounded in my archive.</p>
+
+        <!-- Prescription -->
+        <section class="grid">
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-index">[02]</div>
+                    <h3>Prescription</h3>
+                    <span class="label">What it is prevented from doing</span>
+                </div>
+                <div class="module-content">
+                    <p>My AI is prevented from generating in styles that are not mine. It cannot scrape external aesthetics or imitate other artists. It cannot overwrite my decisions or finalize a work without my confirmation.</p>
+                    <p>It does not optimize for market trends, popularity, or commercial taste. It remains aligned to my authorship, not external demand.</p>
+                    <div class="emphasis">
+                        Do not accommodate me. Question me. Take apart what I say, see whether it can truly stand.
+                    </div>
+                </div>
+                <div class="module-annotation">
+                    Authorship boundary maintained
+                </div>
             </div>
         </section>
-        
-        <section>
-            <h2>Proscriptions (what my AI needs to do)</h2>
-            <div class="section-content">
-                <p>My AI must make its reasoning visible. It must show how it derived a sculptural form from a specific painting logic. It must reveal constraints—material limits, structural risks, fabrication challenges. It must remain transparent about where its suggestions emerge from, so dialogue remains critical rather than blind trust.</p>
+
+        <!-- Permissions -->
+        <section class="grid">
+            <div class="module expandable" onclick="this.classList.toggle('active')">
+                <div class="module-header">
+                    <div class="module-index">[03]</div>
+                    <h3>Permissions</h3>
+                    <span class="label">What it can do, even if not explicitly enabled</span>
+                </div>
+                <div class="module-content">
+                    <div class="expandable-trigger">
+                        <div class="expandable-icon"></div>
+                        <span>Expand reasoning</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="expandable-inner">
+                            <p>My AI may surprise me. It may recombine fragments of my past works in unexpected ways. It may exaggerate certain gestures or distort proportions to test the limits of my language.</p>
+                            <p>It may propose structural solutions I would not have technically imagined, as long as they remain grounded in my archive.</p>
+                            <p style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-light); font-size: 13px; color: var(--gray-mid);">
+                                Like rain at the door, like snow on the skeleton, like plum blossoms choosing to bloom even in shadow.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="module-annotation">
+                    Creative latitude within constraints
+                </div>
             </div>
         </section>
-        
-        <section>
-            <h2>Abilities (what my AI is able to do)</h2>
-            <div class="section-content">
-                <p>It is able to shorten negotiation time between idea and execution. It is able to hold memory—tracking my recurring motifs, preferred proportions, and recurring compositional tensions. It is able to operate as a studio assistant that never forgets past decisions, allowing continuity across works and extended products.</p>
+
+        <!-- Proscriptions -->
+        <section class="grid">
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-index">[04]</div>
+                    <h3>Proscriptions</h3>
+                    <span class="label">What it needs to do</span>
+                </div>
+                <div class="module-content">
+                    <p>My AI must make its reasoning visible. It must show how it derived a sculptural form from a specific painting logic. It must reveal constraints—material limits, structural risks, fabrication challenges.</p>
+                    <p>It must remain transparent about where its suggestions emerge from, so dialogue remains critical rather than blind trust.</p>
+                    <div class="emphasis">
+                        Let me see where I make excuses, where I hesitate, where I overestimate risk, where I overestimate the weight of effort.
+                    </div>
+                </div>
+                <div class="module-annotation">
+                    Transparency required
+                </div>
             </div>
         </section>
-        
-        <section>
-            <h2>Inabilities (what my AI is not able to do)</h2>
-            <div class="section-content">
-                <p>It is not able to replace my intuition. It cannot feel resistance of material or the emotional risk of a decision. It cannot claim authorship. It cannot remove the necessity of responsibility when a work enters the world. It cannot become me.</p>
+
+        <!-- Abilities -->
+        <section class="grid">
+            <div class="module expandable" onclick="this.classList.toggle('active')">
+                <div class="module-header">
+                    <div class="module-index">[05]</div>
+                    <h3>Abilities</h3>
+                    <span class="label">What it is able to do</span>
+                </div>
+                <div class="module-content">
+                    <div class="expandable-trigger">
+                        <div class="expandable-icon"></div>
+                        <span>Expand process</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="expandable-inner">
+                            <p>It is able to shorten negotiation time between idea and execution. It is able to hold memory—tracking my recurring motifs, preferred proportions, and recurring compositional tensions.</p>
+                            <p>It is able to operate as a studio assistant that never forgets past decisions, allowing continuity across works and extended products.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="module-annotation">
+                    Studio memory system
+                </div>
             </div>
         </section>
-        
-        <div class="conclusion">
-            <p>In an ideal world, this AI tastes like lemon—sharp, precise, slightly resistant. It is not decorative background music. It is not a competitor. It is a disciplined extension of my painting practice, translating surface into structure while leaving the final act of judgment in my hands.</p>
-        </div>
-        
-        <footer>
-            <p>© 2026 | Manifesto for My Sculptural AI</p>
-        </footer>
+
+        <!-- Inabilities -->
+        <section class="grid">
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-index">[06]</div>
+                    <h3>Inabilities</h3>
+                    <span class="label">What it is not able to do</span>
+                </div>
+                <div class="module-content">
+                    <p>It is not able to replace my intuition. It cannot feel resistance of material or the emotional risk of a decision. It cannot claim authorship.</p>
+                    <p>It cannot remove the necessity of responsibility when a work enters the world. It cannot become me.</p>
+                    <div class="emphasis">
+                        If in the end it is still a missed encounter, then let the missed encounter be clear. Let me know I once stood at the door, once reached out, once saw the door as it truly was.
+                    </div>
+                </div>
+                <div class="module-annotation">
+                    Fundamental limits preserved
+                </div>
+            </div>
+        </section>
+
+        <!-- Closing Statement -->
+        <section class="grid">
+            <div class="closing">
+                <p class="closing-text">
+                    In an ideal world, this AI tastes like <span class="closing-accent">lemon</span>—sharp, precise, slightly resistant. It is not decorative background music. It is not a competitor.
+                </p>
+                <p class="closing-text">
+                    It is a disciplined extension of my painting practice, translating surface into structure while leaving the final act of judgment in my hands.
+                </p>
+                <div class="closing-footnote">
+                    AUTHORSHIP REMAINS / RESPONSIBILITY PERSISTS / JUDGMENT FINAL
+                </div>
+            </div>
+        </section>
     </div>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sculptural AI — Studio Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --off-white: #f7f7f4;
+            --gray-light: #e2e2dd;
+            --gray-mid: #9a9a94;
+            --gray-dark: #3e3e3a;
+            --technical-blue: #4e6f8c;
+            --lemon: #dfe84a;
+            --lemon-faint: rgba(223, 232, 74, 0.10);
+            --blue-faint: rgba(78, 111, 140, 0.06);
+            --transition-slow: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+            --transition-mid: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--off-white);
+            color: var(--gray-dark);
+            line-height: 1.65;
+            font-size: 15px;
+        }
+
+        /* ─── Waveform Canvas ─── */
+        #waveform-canvas {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── Layout ─── */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 48px 120px;
+        }
+
+        /* ─── Top Nav ─── */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 0;
+            border-bottom: 1px solid var(--gray-light);
+            margin-bottom: 0;
+        }
+
+        .nav-id {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            color: var(--gray-mid);
+        }
+
+        .nav-id span {
+            color: var(--technical-blue);
+        }
+
+        .nav-index {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-index a {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-mid);
+            text-decoration: none;
+            transition: var(--transition-mid);
+        }
+
+        .nav-index a:hover {
+            color: var(--technical-blue);
+        }
+
+        /* ─── Hero ─── */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            padding: 80px 0 72px;
+            border-bottom: 1px solid var(--gray-light);
+            position: relative;
+        }
+
+        .hero-left {
+            position: relative;
+        }
+
+        /* Gestural paint stroke SVG behind title */
+        .paint-stroke {
+            position: absolute;
+            top: -16px;
+            left: -10px;
+            width: 260px;
+            height: 80px;
+            opacity: 0.07;
+            pointer-events: none;
+        }
+
+        .hero-label {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--gray-mid);
+            margin-bottom: 16px;
+        }
+
+        .hero-title {
+            font-size: 44px;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .hero-title em {
+            font-style: normal;
+            color: var(--technical-blue);
+        }
+
+        .hero-subtitle {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: var(--gray-mid);
+            letter-spacing: 0.06em;
+            margin-top: 16px;
+            line-height: 2;
+        }
+
+        /* Lemon accent bar */
+        .lemon-bar {
+            width: 40px;
+            height: 3px;
+            background: var(--lemon);
+            margin: 24px 0;
+        }
+
+        .hero-body {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-dark);
+        }
+
+        .hero-body p + p {
+            margin-top: 14px;
+        }
+
+        .hero-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        /* ─── Poem Block ─── */
+        .poem-block {
+            background: var(--blue-faint);
+            border-left: 2px solid var(--technical-blue);
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Brushwork decoration */
+        .poem-block::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 60px; height: 100%;
+            background: linear-gradient(to left, rgba(78,111,140,0.04), transparent);
+            pointer-events: none;
+        }
+
+        .poem-block p {
+            font-size: 13px;
+            line-height: 2;
+            color: var(--technical-blue);
+            font-style: italic;
+            margin-bottom: 0;
+        }
+
+        .poem-label {
+            font-family: 'Courier New', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.10em;
+            color: var(--gray-mid);
+            margin-bottom: 10px;
+        }
+
+        /* ─── Section Divider ─── */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 56px 0 0;
+        }
+
+        .section-divider span {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--gray-mid);
+            white-space: nowrap;
+        }
+
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-light);
+        }
+
+        /* ─── Module Grid ─── */
+        .modules {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .module {
+            display: grid;
+            grid-template-columns: 200px 1fr 160px;
+            gap: 0 48px;
+            padding: 44px 0;
+            border-bottom: 1px solid var(--gray-light);
+            position: relative;
+            transition: background 0.7s ease;
+        }
+
+        .module:hover {
+            background: var(--blue-faint);
+        }
+
+        /* Left accent line on hover */
+        .module::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: 2px;
+            height: 0;
+            background: var(--lemon);
+            transition: height 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .module:hover::before {
+            height: 100%;
+        }
+
+        /* ─── Module: Left column ─── */
+        .module-meta {
+            padding-top: 2px;
+        }
+
+        .module-index {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--gray-mid);
+            margin-bottom: 10px;
+        }
+
+        .module-title {
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--technical-blue);
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+        }
+
+        .module-subtitle {
+            font-family: 'Courier New', monospace;
+            font-size: 9px;
+            color: var(--gray-mid);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.8;
+        }
+
+        /* ─── Module: Center column ─── */
+        .module-body {
+            font-size: 14.5px;
+            line-height: 1.8;
+            color: var(--gray-dark);
+        }
+
+        .module-body p + p {
+            margin-top: 12px;
+        }
+
+        /* Expandable reasoning block */
+        .expand-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-mid);
+            transition: var(--transition-mid);
+        }
+
+        .expand-btn:hover {
+            color: var(--technical-blue);
+        }
+
+        .expand-icon {
+            width: 14px;
+            height: 14px;
+            border: 1px solid currentColor;
+            position: relative;
+            flex-shrink: 0;
+            transition: var(--transition-mid);
+        }
+
+        .expand-icon::before,
+        .expand-icon::after {
+            content: '';
+            position: absolute;
+            background: currentColor;
+            transition: var(--transition-mid);
+        }
+
+        .expand-icon::before {
+            width: 6px; height: 1px;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .expand-icon::after {
+            width: 1px; height: 6px;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .expand-btn.open .expand-icon {
+            border-color: var(--technical-blue);
+        }
+
+        .expand-btn.open .expand-icon::after {
+            height: 0;
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.9s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .expandable-content.open {
+            max-height: 800px;
+        }
+
+        .reasoning-block {
+            margin-top: 16px;
+            padding: 20px 22px;
+            background: var(--blue-faint);
+            border-left: 2px solid var(--technical-blue);
+        }
+
+        .reasoning-block p {
+            font-size: 13px;
+            line-height: 1.9;
+            color: var(--technical-blue);
+        }
+
+        /* ─── Painted quote inside module ─── */
+        .painted-quote {
+            position: relative;
+            margin: 20px 0 4px;
+            padding: 16px 20px;
+            background: var(--lemon-faint);
+            border-left: 3px solid var(--lemon);
+        }
+
+        .painted-quote p {
+            font-size: 13px;
+            font-style: italic;
+            line-height: 1.9;
+            color: var(--gray-dark);
+            margin: 0;
+        }
+
+        /* ─── Module: Right annotation ─── */
+        .module-annotation {
+            padding-top: 4px;
+            opacity: 0;
+            transform: translateX(8px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .module:hover .module-annotation {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .annotation-tag {
+            display: inline-block;
+            font-family: 'Courier New', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--off-white);
+            background: var(--technical-blue);
+            padding: 3px 7px;
+            margin-bottom: 12px;
+        }
+
+        .annotation-text {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--gray-mid);
+            line-height: 1.9;
+        }
+
+        /* ─── Score / Waveform Divider ─── */
+        .score-divider {
+            width: 100%;
+            height: 48px;
+            margin: 48px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-lines {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .score-line {
+            width: 100%;
+            height: 1px;
+            background: var(--gray-light);
+            position: relative;
+        }
+
+        /* Animated note dots */
+        .note-dot {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--technical-blue);
+            top: -2px;
+        }
+
+        /* ─── Closing Statement ─── */
+        .closing {
+            padding: 80px 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .closing-left {}
+
+        .closing-title {
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.10em;
+            color: var(--gray-mid);
+            margin-bottom: 24px;
+        }
+
+        .closing-text {
+            font-size: 17px;
+            line-height: 1.85;
+            color: var(--gray-dark);
+        }
+
+        .closing-text .lemon-word {
+            display: inline;
+            background: var(--lemon);
+            padding: 0 4px;
+            font-weight: 500;
+        }
+
+        .closing-right {
+            border-left: 1px solid var(--gray-light);
+            padding-left: 48px;
+        }
+
+        .closing-poem {
+            font-size: 13px;
+            font-style: italic;
+            line-height: 2.2;
+            color: var(--technical-blue);
+            margin-bottom: 32px;
+        }
+
+        .closing-stamp {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--gray-mid);
+            line-height: 2.2;
+        }
+
+        /* ─── Paint Texture Shapes ─── */
+        .paint-texture {
+            position: relative;
+            height: 2px;
+            margin: 0;
+            overflow: visible;
+        }
+
+        /* ─── Footer ─── */
+        footer {
+            padding: 32px 0;
+            border-top: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer span {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--gray-mid);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ─── Brush SVGs (inline decorative) ─── */
+        .brush-accent {
+            display: block;
+            width: 100%;
+            height: 20px;
+            margin: 8px 0;
+            opacity: 0.12;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Waveform canvas: ambient score visualization -->
+<canvas id="waveform-canvas"></canvas>
+
+<div class="page">
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-id">
+            SCULPTURAL AI &nbsp;/&nbsp; <span>Studio Interface</span> &nbsp;/&nbsp; 2026
+        </div>
+        <div class="nav-index">
+            <a href="#capabilities">Capabilities</a>
+            <a href="#prescription">Prescription</a>
+            <a href="#permissions">Permissions</a>
+            <a href="#proscriptions">Proscriptions</a>
+            <a href="#abilities">Abilities</a>
+            <a href="#inabilities">Inabilities</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-left">
+            <!-- Gestural stroke behind title -->
+            <svg class="paint-stroke" viewBox="0 0 260 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8 60 Q40 10 100 30 Q160 50 200 20 Q230 5 255 28" stroke="#4e6f8c" stroke-width="22" stroke-linecap="round" fill="none" opacity="1"/>
+            </svg>
+
+            <div class="hero-label">Manifesto / Positioned Tool / Archive-Based</div>
+            <h1 class="hero-title">Sculptural<br><em>AI</em></h1>
+
+            <svg class="brush-accent" viewBox="0 0 800 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M0 10 Q100 2 200 14 Q300 6 400 12 Q500 4 600 13 Q700 5 800 10" stroke="#4e6f8c" stroke-width="3" stroke-linecap="round" fill="none"/>
+            </svg>
+
+            <div class="hero-subtitle">
+                TYPE: Positioned tool<br>
+                TRAINING SOURCE: Painting archive<br>
+                OUTPUT FORMAT: Sculptural CAD proposals<br>
+                AUTHORSHIP: Retained
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="hero-body">
+                <p>As a painter, I imagine an AI that is not a general assistant but a precise extension of my studio—an internal translator that carries my brush logic into space.</p>
+                <p>This AI does not replace collaboration; it reduces friction between imagination and fabrication. It knows my visual language because it is trained on my paintings, my revisions, my hesitations.</p>
+                <p>It is not neutral software—it is a positioned tool shaped around authorship.</p>
+            </div>
+
+            <div class="lemon-bar"></div>
+
+            <div class="poem-block">
+                <div class="poem-label">Source note / instruction</div>
+                <p>
+                    From now on, do not accommodate me.<br>
+                    Question me. Take apart what I say,<br>
+                    see whether it can truly stand.<br>
+                    Do not let me remain in comfort.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Score divider -->
+    <div class="score-divider" aria-hidden="true">
+        <div class="score-lines">
+            <div class="score-line"><span class="note-dot" style="left:8%"></span></div>
+            <div class="score-line"><span class="note-dot" style="left:23%"></span></div>
+            <div class="score-line"><span class="note-dot" style="left:41%"></span></div>
+            <div class="score-line"><span class="note-dot" style="left:67%"></span></div>
+            <div class="score-line"><span class="note-dot" style="left:85%"></span></div>
+        </div>
+    </div>
+
+    <!-- Section label -->
+    <div class="section-divider">
+        <span>System Parameters</span>
+    </div>
+
+    <!-- Modules -->
+    <div class="modules">
+
+        <!-- 01 Capabilities -->
+        <div class="module" id="capabilities">
+            <div class="module-meta">
+                <div class="module-index">[01]</div>
+                <div class="module-title">Capabilities</div>
+                <div class="module-subtitle">What it is<br>enabled to do</div>
+            </div>
+            <div class="module-body">
+                <p>My AI can analyze my paintings and extract structural principles—gesture rhythm, density, proportion, repetition, tension. It can translate these into sculptural proposals and generate accurate CAD models ready for prototyping.</p>
+                <p>It can simulate material weight, balance, and scale. It can iterate rapidly, producing variations while preserving the core DNA of my visual language.</p>
+
+                <div class="painted-quote">
+                    <p>Like plum blossoms choosing to bloom even in shadow—<br>
+                    it finds form where form is latent, not where it is obvious.</p>
+                </div>
+
+                <button class="expand-btn" onclick="toggleExpand(this)">
+                    <span class="expand-icon"></span>
+                    Show process reasoning
+                </button>
+                <div class="expandable-content">
+                    <div class="reasoning-block">
+                        <p>Derivation path: painting surface → gesture vector extraction → density mapping → structural skeleton → CAD topology → material simulation → proposal output. Each step references the source archive. No step operates without trace.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="module-annotation">
+                <div class="annotation-tag">Enabled</div>
+                <div class="annotation-text">
+                    Analysis<br>
+                    → Translation<br>
+                    → CAD model<br>
+                    → Simulation<br>
+                    → Iteration
+                </div>
+            </div>
+        </div>
+
+        <!-- 02 Prescription -->
+        <div class="module" id="prescription">
+            <div class="module-meta">
+                <div class="module-index">[02]</div>
+                <div class="module-title">Prescription</div>
+                <div class="module-subtitle">What it is<br>prevented from doing</div>
+            </div>
+            <div class="module-body">
+                <p>My AI is prevented from generating in styles that are not mine. It cannot scrape external aesthetics or imitate other artists. It cannot overwrite my decisions or finalize a work without my confirmation.</p>
+                <p>It does not optimize for market trends, popularity, or commercial taste. It remains aligned to my authorship, not external demand.</p>
+
+                <div class="painted-quote">
+                    <p>Some winds are destined never to reach the equator.<br>
+                    This AI is one of them—its range is deliberate.</p>
+                </div>
+            </div>
+            <div class="module-annotation">
+                <div class="annotation-tag">Prevented</div>
+                <div class="annotation-text">
+                    External aesthetics: blocked<br>
+                    Market optimization: blocked<br>
+                    Unconfirmed finalization: blocked<br>
+                    Authorship override: blocked
+                </div>
+            </div>
+        </div>
+
+        <!-- 03 Permissions -->
+        <div class="module" id="permissions">
+            <div class="module-meta">
+                <div class="module-index">[03]</div>
+                <div class="module-title">Permissions</div>
+                <div class="module-subtitle">What it can do,<br>even if not explicitly<br>enabled</div>
+            </div>
+            <div class="module-body">
+                <p>My AI may surprise me. It may recombine fragments of my past works in unexpected ways. It may exaggerate certain gestures or distort proportions to test the limits of my language.</p>
+                <p>It may propose structural solutions I would not have technically imagined, as long as they remain grounded in my archive.</p>
+
+                <button class="expand-btn" onclick="toggleExpand(this)">
+                    <span class="expand-icon"></span>
+                    Show latitude conditions
+                </button>
+                <div class="expandable-content">
+                    <div class="reasoning-block">
+                        <p>Creative latitude is permitted only when the source of recombination is traceable to an archived work. The surprise must be documentable. The unexpected must be explainable after the fact—not before.</p>
+                        <p style="margin-top:12px;">Like rain: it arrives unannounced, but its path through the air follows physics. So too here.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="module-annotation">
+                <div class="annotation-tag">Permitted</div>
+                <div class="annotation-text">
+                    Recombination: yes<br>
+                    Exaggeration: yes<br>
+                    Structural surprise: yes<br>
+                    (archive-grounded only)
+                </div>
+            </div>
+        </div>
+
+        <!-- 04 Proscriptions -->
+        <div class="module" id="proscriptions">
+            <div class="module-meta">
+                <div class="module-index">[04]</div>
+                <div class="module-title">Proscriptions</div>
+                <div class="module-subtitle">What it needs to do</div>
+            </div>
+            <div class="module-body">
+                <p>My AI must make its reasoning visible. It must show how it derived a sculptural form from a specific painting logic. It must reveal constraints—material limits, structural risks, fabrication challenges.</p>
+                <p>It must remain transparent about where its suggestions emerge from, so dialogue remains critical rather than blind trust.</p>
+
+                <div class="painted-quote">
+                    <p>Challenge my thinking, see whether it is only habit.<br>
+                    Point to the places I cannot see,<br>
+                    the cracks I deliberately ignore.</p>
+                </div>
+            </div>
+            <div class="module-annotation">
+                <div class="annotation-tag">Required</div>
+                <div class="annotation-text">
+                    Visible reasoning<br>
+                    Derivation trace<br>
+                    Constraint disclosure<br>
+                    Source transparency
+                </div>
+            </div>
+        </div>
+
+        <!-- 05 Abilities -->
+        <div class="module" id="abilities">
+            <div class="module-meta">
+                <div class="module-index">[05]</div>
+                <div class="module-title">Abilities</div>
+                <div class="module-subtitle">What it is<br>able to do</div>
+            </div>
+            <div class="module-body">
+                <p>It is able to shorten negotiation time between idea and execution. It is able to hold memory—tracking my recurring motifs, preferred proportions, and recurring compositional tensions.</p>
+                <p>It is able to operate as a studio assistant that never forgets past decisions, allowing continuity across works and extended products.</p>
+
+                <button class="expand-btn" onclick="toggleExpand(this)">
+                    <span class="expand-icon"></span>
+                    Show memory architecture
+                </button>
+                <div class="expandable-content">
+                    <div class="reasoning-block">
+                        <p>Memory architecture: persistent motif index / compositional tension log / proportion preference map / decision history with timestamp. Each new work references prior entries; no session begins without context. The studio assistant never forgets past decisions, allowing continuity across works.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="module-annotation">
+                <div class="annotation-tag">Able</div>
+                <div class="annotation-text">
+                    Negotiation reduction<br>
+                    Motif tracking<br>
+                    Proportion memory<br>
+                    Cross-work continuity
+                </div>
+            </div>
+        </div>
+
+        <!-- 06 Inabilities -->
+        <div class="module" id="inabilities">
+            <div class="module-meta">
+                <div class="module-index">[06]</div>
+                <div class="module-title">Inabilities</div>
+                <div class="module-subtitle">What it is<br>not able to do</div>
+            </div>
+            <div class="module-body">
+                <p>It is not able to replace my intuition. It cannot feel resistance of material or the emotional risk of a decision. It cannot claim authorship.</p>
+                <p>It cannot remove the necessity of responsibility when a work enters the world. It cannot become me.</p>
+
+                <div class="painted-quote">
+                    <p>I was once a piece of snow, so light it had no direction.<br>
+                    The AI is the skeleton it falls upon—<br>
+                    it gives shape, but it is not the snow.<br>
+                    It does not fall. It does not feel the landing.</p>
+                </div>
+            </div>
+            <div class="module-annotation">
+                <div class="annotation-tag">Unable</div>
+                <div class="annotation-text">
+                    Intuition: irreplaceable<br>
+                    Material resistance: unfelt<br>
+                    Authorship: unclaimed<br>
+                    Responsibility: non-transferable
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Score divider 2 -->
+    <div class="score-divider" aria-hidden="true" style="margin-top:48px;">
+        <div class="score-lines">
+            <div class="score-line"><span class="note-dot" style="left:14%"></span></div>
+            <div class="score-line"><span class="note-dot" style="left:38%"></span></div>
+            <div class="score-line"><span class="note-dot" style="left:55%"></span></div>
+            <div class="score-line"><span class="note-dot" style="left:72%"></span></div>
+            <div class="score-line"><span class="note-dot" style="left:91%"></span></div>
+        </div>
+    </div>
+
+    <!-- Closing Statement -->
+    <section class="closing">
+        <div class="closing-left">
+            <div class="closing-title">Closing statement / Final judgment</div>
+            <div class="closing-text">
+                <p>In an ideal world, this AI tastes like <span class="lemon-word">lemon</span>—sharp, precise, slightly resistant. It is not decorative background music. It is not a competitor.</p>
+                <br>
+                <p>It is a disciplined extension of my painting practice, translating surface into structure while leaving the final act of judgment in my hands.</p>
+                <br>
+                <p>It does not soften the edges. It does not polish the difficulty. It does not spare me from the weight of making a decision that enters the world under my name.</p>
+            </div>
+        </div>
+        <div class="closing-right">
+            <div class="closing-poem">
+                If in the end it is still a missed encounter,<br>
+                then let the missed encounter be clear.<br><br>
+                Let me know I once stood at the door,<br>
+                once reached out,<br>
+                once saw the door as it truly was.<br><br>
+                Rather than being carried away by gentleness,<br>
+                believing I had already arrived.
+            </div>
+            <div class="closing-stamp">
+                AUTHORSHIP ↗ RETAINED<br>
+                JUDGMENT ↗ FINAL<br>
+                RESPONSIBILITY ↗ PERSISTS<br>
+                TOOL STATUS ↗ ACTIVE
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span>Sculptural AI — Studio Interface</span>
+        <span>Authorship: Painter / Tool: Positioned / 2026</span>
+    </footer>
+
+</div>
+
+<!-- Waveform script: minimal ambient score bars -->
+<script>
+    (function () {
+        var canvas = document.getElementById('waveform-canvas');
+        var ctx = canvas.getContext('2d');
+        var bars = [];
+        var W, H;
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = 80;
+        }
+
+        function initBars() {
+            bars = [];
+            var count = Math.floor(W / 6);
+            for (var i = 0; i < count; i++) {
+                bars.push({
+                    x: i * 6,
+                    height: 4 + Math.random() * 28,
+                    speed: 0.002 + Math.random() * 0.004,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        var t = 0;
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = '#4e6f8c';
+            t += 0.008;
+            for (var i = 0; i < bars.length; i++) {
+                var b = bars[i];
+                var h = b.height * (0.4 + 0.6 * Math.abs(Math.sin(t * b.speed * 200 + b.phase)));
+                ctx.fillRect(b.x, H - h, 2, h);
+            }
+            requestAnimationFrame(draw);
+        }
+
+        resize();
+        initBars();
+        draw();
+        window.addEventListener('resize', function () { resize(); initBars(); });
+    })();
+
+    function toggleExpand(btn) {
+        btn.classList.toggle('open');
+        var content = btn.nextElementSibling;
+        content.classList.toggle('open');
+    }
+</script>
+
 </body>
 </html>
