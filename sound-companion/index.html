@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sound Companion</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="speaker-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="50" cy="50" r="25" fill="none" stroke="currentColor" stroke-width="1"/>
+                        <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>AI Sound Companion</h1>
+                    <p>Creative sound design assistant</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="section upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="videoInput" accept="video/mp4,video/quicktime,video/webm" style="display: none;">
+                    <svg class="upload-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/>
+                    </svg>
+                    <h3>Upload Video</h3>
+                    <p>Upload an MP4, MOV, or WebM file</p>
+                    <button class="btn btn-primary" id="uploadBtn">Choose Video</button>
+                </div>
+            </section>
+
+            <!-- Video Preview Section -->
+            <section class="section preview-section" id="previewSection" style="display: none;">
+                <div class="video-container">
+                    <video id="videoPreview" width="100%" height="auto" controls></video>
+                </div>
+                <div class="video-info">
+                    <p id="videoFileName"></p>
+                </div>
+            </section>
+
+            <!-- Controls Section -->
+            <section class="section controls-section" id="controlsSection" style="display: none;">
+                <button class="btn btn-primary btn-large" id="generateBtn">
+                    <span class="btn-text">Generate Sound Ideas</span>
+                </button>
+            </section>
+
+            <!-- Mood Selection -->
+            <section class="section mood-section" id="moodSection" style="display: none;">
+                <h3>Sound Mood</h3>
+                <div class="mood-buttons">
+                    <button class="mood-btn active" data-mood="cinematic">Cinematic</button>
+                    <button class="mood-btn" data-mood="documentary">Documentary</button>
+                    <button class="mood-btn" data-mood="horror">Horror</button>
+                    <button class="mood-btn" data-mood="poetic">Poetic</button>
+                    <button class="mood-btn" data-mood="experimental">Experimental</button>
+                </div>
+            </section>
+
+            <!-- AI Response Section -->
+            <section class="section response-section" id="responseSection" style="display: none;">
+                <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Listening and interpreting your video...</p>
+                </div>
+
+                <div class="response-content" id="responseContent" style="display: none;">
+                    <!-- Scene Interpretation -->
+                    <div class="response-card">
+                        <h3 class="response-title">Scene Interpretation</h3>
+                        <p id="sceneInterpretation"></p>
+                    </div>
+
+                    <!-- Music Suggestion -->
+                    <div class="response-card">
+                        <div class="response-header">
+                            <h3 class="response-title">Music Suggestion</h3>
+                            <button class="btn btn-small btn-music" id="playMusicBtn" style="display: none;">
+                                <span>🎵 Generate Music</span>
+                            </button>
+                        </div>
+                        <p id="musicDescription"></p>
+                        <div class="music-info" id="musicInfo" style="display: none;">
+                            <div class="waveform">
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                            </div>
+                            <p class="music-note">Music visualization and generation concept</p>
+                        </div>
+                    </div>
+
+                    <!-- Music Elements -->
+                    <div class=\"response-card\">
+                        <h3 class=\"response-title\">Music Elements</h3>
+                        <ul id="soundList" class="sound-list"></ul>
+                    </div>
+
+                    <!-- Creative Direction -->
+                    <div class="response-card">
+                        <h3 class="response-title">Creative Direction</h3>
+                        <p id="creativeDirection"></p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="response-actions">
+                        <button class="btn btn-secondary" id="regenerateBtn">Regenerate Ideas</button>
+                        <button class="btn btn-secondary" id="downloadBtn">Download Text</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upload New Video -->
+            <section class="section" id="changeVideoSection" style="display: none;">
+                <button class="btn btn-secondary btn-block" id="uploadNewBtn">Upload New Video</button>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>AI Sound Companion • Speculative design for creative audio</p>
+        </footer>
+    </div>
+
+    <!-- Hidden audio element for music -->
+    <audio id="audioPlayer" style="display: none;"></audio>
+
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

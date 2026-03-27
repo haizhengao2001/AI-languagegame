@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abstract AI Golf Ball</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">Abstract AI Golf Ball</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#gesture-tracking" class="nav-link">Create Art</a></li>
+                <li><a href="#story" class="nav-link">Story</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Every Swing leaves a memory moment.</h1>
+            <p class="hero-description">Not every great moment is recorded. Now it is remembered.</p>
+            <button class="cta-button" onclick="scrollToDemo()">Create Your Artwork</button>
+        </div>
+        <div class="hero-canvas">
+            <canvas id="heroCanvas"></canvas>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps-container">
+            <!-- Step 1 -->
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Play</h3>
+                    <p>The ball records your movement and shots</p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Capture</h3>
+                    <p>Data is translated into motion paths and emotional metrics</p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Transform</h3>
+                    <p>AI generates a unique abstract artwork</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Gesture Tracking Section -->
+    <section id="gesture-tracking" class="gesture-tracking-section">
+        <h2>Trace Your Movement</h2>
+        
+        <div class="gesture-container">
+            <div class="camera-preview" id="cameraPreview">
+                <video id="cameraVideo" autoplay="" playsinline="" muted=""></video>
+                <canvas id="gestureCanvas"></canvas>
+                <div class="gesture-overlay">
+                    <div class="timer" id="gestureTimer" style="display: none;">
+                        <span id="timerText">5</span>s
+                    </div>
+                    <div class="status-message" id="gestureStatus">
+                        Tap the canvas to start
+                    </div>
+                </div>
+            </div>
+            <div class="gesture-download-actions" id="gestureDownloadActions" style="display: none;">
+                <button class="export-btn" id="downloadPngBtn" type="button">Download PNG</button>
+                <button class="export-btn export-btn-secondary" id="downloadJsonBtn" type="button">Download JSON</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section id="story" class="story-section">
+        <div class="story-content">
+            <h2>This Is Not About Performance</h2>
+            <p class="story-intro">This is about memory, emotion, and presence.</p>
+            
+            <div class="story-grid">
+                <div class="story-card">
+                    <h3>The Problem</h3>
+                    <p>Professional players have every moment recorded, replayed, and celebrated. But what about the rest of us? Our best shots, our breakthroughs, our perfect rounds—they disappear.</p>
+                    <p>Golf is a memory game, and we were losing.</p>
+                </div>
+
+                <div class="story-card">
+                    <h3>The Insight</h3>
+                    <p>Every round tells a story. Your swing patterns, your tempo, your accuracy, your consistency—these are the invisible threads of your game. They're personal, unique, and deeply emotional.</p>
+                    <p>What if we could see them?</p>
+                </div>
+
+                <div class="story-card">
+                    <h3>The Solution</h3>
+                    <p>A smart ball that captures every detail. Not to judge performance, but to preserve it. Your data becomes your art. Your round becomes your legacy.</p>
+                    <p>Not a tracking app. A memory machine.</p>
+                </div>
+            </div>
+
+            <div class="contrast-section">
+                <div class="contrast-item">
+                    <h4>Professional Players</h4>
+                    <p>Every moment recorded, broadcasted, analyzed.</p>
+                </div>
+                <div class="contrast-item">
+                    <h4>Amateur Players (Before)</h4>
+                    <p>Moments forgotten, only a scorecard remains.</p>
+                </div>
+                <div class="contrast-item highlight">
+                    <h4>Amateur Players (Now)</h4>
+                    <p>Personal archive system. Emotional. Visual. Permanent.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Abstract Golf. Turning moments into memories.</p>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#gesture-tracking">Create Art</a>
+                <a href="#story">Story</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/art-generator.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

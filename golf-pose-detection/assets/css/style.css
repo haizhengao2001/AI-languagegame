@@ -1,0 +1,341 @@
+/* ============================================
+   AI Golf • Pose Detection Styling
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   Webcam & Canvas
+   ============================================ */
+
+.webcam-video,
+.pose-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(-1);
+    object-fit: cover;
+}
+
+.webcam-video {
+    display: block;
+}
+
+.pose-canvas {
+    z-index: 10;
+}
+
+/* ============================================
+   Overlay & Messages
+   ============================================ */
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-box {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    padding: 40px 60px;
+    border-radius: 20px;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.status-message {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.status-info {
+    font-size: 1rem;
+    color: rgba(0, 217, 255, 0.8);
+    margin-top: 10px;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}
+
+/* ============================================
+   Pose State Indicator
+   ============================================ */
+
+.pose-state {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    z-index: 30;
+    transition: all 0.3s ease;
+}
+
+.state-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #FFD700;
+    animation: pulse 1.5s infinite;
+}
+
+.pose-state.valid .state-circle {
+    background: #00D9FF;
+    animation: pulse-valid 1.5s infinite;
+}
+
+.pose-state.invalid .state-circle {
+    background: #FF6B6B;
+    animation: pulse-invalid 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(255, 215, 0, 0);
+    }
+}
+
+@keyframes pulse-valid {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(0, 217, 255, 0);
+    }
+}
+
+@keyframes pulse-invalid {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(255, 107, 107, 0);
+    }
+}
+
+.state-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #FFD700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pose-state.valid .state-label {
+    color: #00D9FF;
+}
+
+.pose-state.invalid .state-label {
+    color: #FF6B6B;
+}
+
+/* ============================================
+   Footer Info
+   ============================================ */
+
+.footer-info {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    z-index: 30;
+    text-align: left;
+}
+
+.footer-info p {
+    margin: 0;
+}
+
+.footer-info strong {
+    color: #00D9FF;
+    font-weight: 600;
+}
+
+/* ============================================
+   Skeleton Toggle
+   ============================================ */
+
+.toggle-skeleton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 16px;
+    background: rgba(0, 217, 255, 0.1);
+    border: 1px solid rgba(0, 217, 255, 0.5);
+    color: #00D9FF;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 30;
+    pointer-events: auto;
+}
+
+.toggle-skeleton:hover {
+    background: rgba(0, 217, 255, 0.2);
+    border-color: rgba(0, 217, 255, 0.8);
+}
+
+.toggle-skeleton:active {
+    transform: scale(0.95);
+}
+
+/* ============================================
+   Loading Indicator
+   ============================================ */
+
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    transition: opacity 0.6s ease;
+}
+
+.loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(0, 217, 255, 0.1);
+    border-top-color: #00D9FF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading p {
+    color: #00D9FF;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+    .message-box {
+        padding: 30px 40px;
+        border-radius: 15px;
+    }
+
+    .status-message {
+        font-size: 2rem;
+    }
+
+    .status-info {
+        font-size: 0.9rem;
+    }
+
+    .pose-state {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 16px;
+    }
+
+    .footer-info {
+        bottom: 20px;
+        left: 20px;
+        font-size: 0.85rem;
+    }
+
+    .toggle-skeleton {
+        top: 10px;
+        right: 10px;
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* ============================================
+   High-Tech Accents
+   ============================================ */
+
+/* Glow effect on message for valid state */
+.message-box.pose-valid {
+    border-color: rgba(0, 217, 255, 0.8);
+    background: rgba(0, 217, 255, 0.05);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+}
+
+.message-box.pose-invalid {
+    border-color: rgba(255, 107, 107, 0.5);
+    background: rgba(255, 107, 107, 0.03);
+}

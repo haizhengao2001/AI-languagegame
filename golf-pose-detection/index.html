@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Golf • Pose Detection</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Video Canvas -->
+        <video id="webcam" class="webcam-video" autoplay playsinline muted></video>
+        <canvas id="canvas" class="pose-canvas"></canvas>
+
+        <!-- Status Overlay -->
+        <div class="overlay">
+            <!-- Message Display -->
+            <div class="message-box">
+                <p class="status-message" id="statusMessage">Initializing...</p>
+                <p class="status-info" id="statusInfo"></p>
+            </div>
+
+            <!-- Pose State Indicator -->
+            <div class="pose-state" id="poseState">
+                <div class="state-circle"></div>
+                <span class="state-label" id="stateLabel">DETECTING</span>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="footer-info">
+                <p>Hold your golf finish pose for <strong>1.5 seconds</strong></p>
+            </div>
+        </div>
+
+        <!-- Skeleton Toggle (Debug) -->
+        <button class="toggle-skeleton" id="toggleSkeleton" title="Toggle skeleton visibility">
+            Skeleton: ON
+        </button>
+
+        <!-- Loading Indicator -->
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Loading MediaPipe Pose...</p>
+        </div>
+    </div>
+
+    <!-- MediaPipe Pose -->
+    <script async src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="assets/js/pose-detector.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
