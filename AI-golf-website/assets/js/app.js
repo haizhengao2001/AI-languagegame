@@ -22,10 +22,123 @@ let lastHandDetectionTs = 0;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
+    initializeCourseBackground();
     initializeHeroAnimation();
     initializeStepVisualizations();
     attachEventListeners();
 });
+
+// Course Layout Background
+function initializeCourseBackground() {
+    const canvas = document.getElementById('courseBgCanvas');
+    if (!canvas) return;
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawCourseLayout(canvas.getContext('2d'), canvas.width, canvas.height);
+    }
+
+    var resizeTimer;
+    function onResize() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 150);
+    }
+
+    resize();
+    window.addEventListener('resize', onResize);
+}
+
+// Draw a top-down golf course layout using Canvas 2D API only (no large strings).
+// Each hole entry: [tee [x,y], cp1 [x,y], cp2 [x,y], green [x,y]] — coords normalized 0-1.
+function drawCourseLayout(ctx, w, h) {
+    var scale = Math.min(w, h);
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Rough terrain base
+    ctx.fillStyle = '#152d1e';
+    ctx.fillRect(0, 0, w, h);
+
+    var holes = [
+        [[0.07,0.08],[0.10,0.14],[0.16,0.20],[0.22,0.24]],
+        [[0.26,0.06],[0.34,0.08],[0.42,0.13],[0.48,0.20]],
+        [[0.52,0.06],[0.58,0.10],[0.63,0.18],[0.65,0.27]],
+        [[0.70,0.10],[0.75,0.16],[0.80,0.24],[0.82,0.33]],
+        [[0.86,0.20],[0.89,0.30],[0.86,0.38],[0.80,0.44]],
+        [[0.90,0.49],[0.88,0.57],[0.84,0.62],[0.77,0.66]],
+        [[0.80,0.72],[0.74,0.78],[0.67,0.82],[0.60,0.84]],
+        [[0.56,0.91],[0.47,0.89],[0.39,0.85],[0.32,0.81]],
+        [[0.28,0.86],[0.20,0.81],[0.13,0.75],[0.10,0.69]],
+        [[0.08,0.63],[0.12,0.57],[0.18,0.53],[0.25,0.51]],
+        [[0.29,0.46],[0.35,0.42],[0.41,0.39],[0.47,0.39]],
+        [[0.51,0.37],[0.56,0.35],[0.60,0.38],[0.62,0.44]],
+        [[0.64,0.49],[0.68,0.55],[0.66,0.61],[0.63,0.65]],
+        [[0.60,0.69],[0.54,0.74],[0.48,0.73],[0.42,0.71]],
+        [[0.38,0.67],[0.32,0.63],[0.28,0.58],[0.26,0.52]],
+        [[0.22,0.48],[0.24,0.42],[0.27,0.37],[0.32,0.33]],
+        [[0.36,0.29],[0.41,0.25],[0.45,0.21],[0.49,0.19]],
+        [[0.53,0.15],[0.55,0.11],[0.57,0.08],[0.59,0.06]]
+    ];
+
+    var fairwayWidth = scale * 0.038;
+    var greenRadius  = scale * 0.027;
+    var bunkerRadius = scale * 0.013;
+    var teeSize      = scale * 0.012;
+    var bunkerOffsets = [[0.028,-0.020],[-0.018,0.024],[0.022,0.026],[-0.026,-0.016]];
+
+    // Water hazards (painted beneath fairways)
+    ctx.fillStyle = '#0c2035';
+    ctx.beginPath();
+    ctx.ellipse(w * 0.40, h * 0.16, w * 0.055, h * 0.038, 0.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(w * 0.71, h * 0.56, w * 0.048, h * 0.033, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Fairways
+    ctx.lineCap = 'round';
+    ctx.lineWidth = fairwayWidth;
+    ctx.strokeStyle = '#256038';
+    holes.forEach(function(hole) {
+        var tee = hole[0], cp1 = hole[1], cp2 = hole[2], green = hole[3];
+        ctx.beginPath();
+        ctx.moveTo(tee[0] * w, tee[1] * h);
+        ctx.bezierCurveTo(cp1[0]*w, cp1[1]*h, cp2[0]*w, cp2[1]*h, green[0]*w, green[1]*h);
+        ctx.stroke();
+    });
+
+    // Greens
+    ctx.fillStyle = '#38a84e';
+    holes.forEach(function(hole) {
+        var green = hole[3];
+        ctx.beginPath();
+        ctx.arc(green[0] * w, green[1] * h, greenRadius, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    // Sand bunkers near each green
+    ctx.fillStyle = '#a8884c';
+    holes.forEach(function(hole, i) {
+        var green = hole[3];
+        var off = bunkerOffsets[i % 4];
+        ctx.beginPath();
+        ctx.ellipse(
+            green[0] * w + off[0] * scale,
+            green[1] * h + off[1] * scale,
+            bunkerRadius * 1.3, bunkerRadius * 0.75,
+            i * 0.55, 0, Math.PI * 2
+        );
+        ctx.fill();
+    });
+
+    // Tee boxes
+    ctx.fillStyle = '#3cb554';
+    holes.forEach(function(hole) {
+        var tee = hole[0];
+        ctx.fillRect(tee[0]*w - teeSize/2, tee[1]*h - teeSize/2, teeSize, teeSize);
+    });
+}
 
 // Hero Canvas Animation
 function initializeHeroAnimation() {
