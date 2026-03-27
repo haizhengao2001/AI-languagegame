@@ -15,25 +15,63 @@
     --border-color: #4f8f60;
     --transition-smooth: 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --transition-fast: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --course-canvas-opacity: 0.62;
+    --course-canvas-blur: 2.5px;
+    --course-canvas-brightness: 0.58;
 }
 
 html {
     scroll-behavior: smooth;
+    background: #0a1c11;
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-image:
-        linear-gradient(rgba(10, 36, 18, 0.64), rgba(15, 48, 24, 0.62)),
-        radial-gradient(circle at 78% 20%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 28%),
-        radial-gradient(circle at 18% 70%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 26%),
-        linear-gradient(160deg, #206736 0%, #2f8747 38%, #4ba65d 62%, #e6f3d7 100%);
-    background-size: cover, cover, cover, cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background: transparent;
     color: var(--text-primary);
     overflow-x: hidden;
+}
+
+/* Course layout background canvas */
+#courseBgCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: var(--course-canvas-opacity);
+    filter: blur(var(--course-canvas-blur)) brightness(var(--course-canvas-brightness));
+    pointer-events: none;
+}
+
+/* Atmospheric mist overlay */
+.course-mist-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 62% 44% at 16% 33%, rgba(192, 228, 208, 0.11) 0%, transparent 68%),
+        radial-gradient(ellipse 52% 46% at 79% 63%, rgba(170, 212, 186, 0.09) 0%, transparent 62%),
+        radial-gradient(ellipse 76% 54% at 47% 12%, rgba(146, 194, 166, 0.08) 0%, transparent 72%),
+        radial-gradient(ellipse 56% 50% at 36% 84%, rgba(156, 200, 172, 0.07) 0%, transparent 66%),
+        linear-gradient(
+            to bottom,
+            rgba(5, 17, 10, 0.92) 0%,
+            rgba(8, 25, 14, 0.65) 38%,
+            rgba(8, 25, 14, 0.65) 62%,
+            rgba(5, 17, 10, 0.90) 100%
+        );
+    animation: mistShift 18s ease-in-out infinite alternate;
+}
+
+@keyframes mistShift {
+    from { opacity: 1; }
+    to   { opacity: 0.82; }
 }
 
 /* Navigation */
